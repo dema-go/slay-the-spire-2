@@ -37,14 +37,18 @@
 
 ## 运行方式
 
+### 方式一：直接打开
+双击 `index.html` 直接在浏览器中打开（部分浏览器可能需要本地服务器）
+
+### 方式二：本地服务器
 ```bash
-# 本地启动服务
 cd slay-the-spire-2
 python3 -m http.server 8080
-
-# 浏览器打开
-open http://localhost:8080
+# 浏览器打开 http://localhost:8080
 ```
+
+### 方式三：部署到 Vercel/Netlify
+上传整个项目文件夹即可
 
 ## 项目结构
 
