@@ -4,60 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>杀戮尖塔2 - Slay the Spire II</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Main Menu -->
     <div id="screen-menu" class="screen active">
-        <div class="menu-bg">
-            <div class="menu-content">
-                <h1 class="game-title">SLAY THE<br>SPIRE <span class="title-2">II</span></h1>
-                <p style="color: #8d99ae; margin-bottom: 1rem;">网页版卡牌对战</p>
-                <div class="menu-buttons">
-                    <button class="btn btn-primary btn-lg" onclick="Game.showScreen('character-select')">
-                        ⚔ 开始冒险
-                    </button>
-                    <button class="btn btn-secondary btn-lg" onclick="Game.loadGame(); if(Game.state.character) Game.showScreen('map');">
-                        💾 继续游戏
-                    </button>
-                </div>
+        <div class="menu-content">
+            <h1 class="game-title">SLAY THE<br>SPIRE <span class="title-2">II</span></h1>
+            <p class="menu-subtitle">卡牌 · 策略 · 冒险</p>
+            <div class="menu-buttons">
+                <button class="btn btn-primary btn-lg" onclick="Game.showScreen('character-select')">
+                    开始冒险
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="Game.loadAndResume()">
+                    继续游戏
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Character Select -->
     <div id="screen-character-select" class="screen">
-        <div class="char-select-bg">
-            <button class="btn btn-back" onclick="Game.showScreen('menu')">← 返回</button>
-            <h2 class="section-title">选择你的角色</h2>
-            <div class="char-cards">
-                <div class="char-card" onclick="Game.selectCharacter('ironclad')">
-                    <div class="char-portrait ironclad-portrait"><div class="char-icon">🗡️</div></div>
-                    <h3>铁甲战士</h3>
-                    <p class="char-desc">以力量和护甲碾压敌人</p>
-                    <div class="char-stats">
-                        <span>❤ 80 HP</span>
-                        <span>🩸 燃烧之血</span>
-                    </div>
-                    <div class="char-tags">
-                        <span class="tag">力量</span>
-                        <span class="tag">护甲</span>
-                        <span class="tag">燃烧</span>
-                    </div>
+        <button class="btn btn-back" onclick="Game.showScreen('menu')">返回</button>
+        <h2 class="section-title">选择你的角色</h2>
+        <div class="char-cards">
+            <div class="char-card" onclick="Game.selectCharacter('ironclad')">
+                <div class="char-portrait ironclad-portrait"><div>🗡️</div></div>
+                <h3>铁甲战士</h3>
+                <p class="char-desc">以力量和护甲碾压敌人</p>
+                <div class="char-stats">
+                    <span>❤️ 80 HP</span>
+                    <span>🩸 燃烧之血</span>
                 </div>
-                <div class="char-card" onclick="Game.selectCharacter('silent')">
-                    <div class="char-portrait silent-portrait"><div class="char-icon">🗡️</div></div>
-                    <h3>静默猎人</h3>
-                    <p class="char-desc">以毒药和敏捷击杀敌人</p>
-                    <div class="char-stats">
-                        <span>❤ 70 HP</span>
-                        <span>🐍 蛇戒</span>
-                    </div>
-                    <div class="char-tags">
-                        <span class="tag">毒药</span>
-                        <span class="tag">敏捷</span>
-                        <span class="tag">暴击</span>
-                    </div>
+                <div class="char-tags">
+                    <span class="tag">力量</span>
+                    <span class="tag">护甲</span>
+                    <span class="tag">燃烧</span>
+                </div>
+            </div>
+            <div class="char-card" onclick="Game.selectCharacter('silent')">
+                <div class="char-portrait silent-portrait"><div>🗡️</div></div>
+                <h3>静默猎人</h3>
+                <p class="char-desc">以毒药和敏捷击杀敌人</p>
+                <div class="char-stats">
+                    <span>❤️ 70 HP</span>
+                    <span>🐍 蛇戒</span>
+                </div>
+                <div class="char-tags">
+                    <span class="tag">毒药</span>
+                    <span class="tag">敏捷</span>
+                    <span class="tag">暴击</span>
                 </div>
             </div>
         </div>
@@ -65,14 +64,17 @@
 
     <!-- Map Screen -->
     <div id="screen-map" class="screen">
-        <button class="btn btn-back" onclick="Game.saveGame(); Game.showScreen('menu')">← 菜单</button>
+        <button class="btn btn-back" onclick="Game.saveGame(); Game.showScreen('menu')">菜单</button>
         <div class="map-header">
             <div class="player-info">
-                <div class="stat-bar"><span>❤</span> <span id="player-hp">80/80</span></div>
-                <div class="stat-bar"><span>💰</span> <span id="player-gold">80</span></div>
+                <div class="stat-item">❤️ <span id="player-hp">80/80</span></div>
+                <div class="stat-item">💰 <span id="player-gold">80</span></div>
+                <div class="relics-bar" id="map-relics"></div>
             </div>
+            <div class="map-floor-info">第 <span id="floor-num">1</span> 层</div>
         </div>
         <div class="map-container">
+            <svg class="map-svg" id="map-svg"></svg>
             <div class="map-nodes" id="map-nodes"></div>
         </div>
     </div>
@@ -80,41 +82,62 @@
     <!-- Battle Screen -->
     <div id="screen-battle" class="screen">
         <div class="battle-top">
-            <div class="stat-bar">回合: <span id="turn-counter">1</span></div>
+            <div class="turn-counter">回合 <span id="turn-counter">1</span></div>
+            <div id="deck-info" style="font-size: 0.85rem;"></div>
         </div>
         <div class="battle-arena" id="battle-arena"></div>
+        <div class="player-area" id="player-area"></div>
+        <div class="hand-area" id="hand-area"></div>
         <div class="battle-controls">
-            <button class="btn btn-end-turn" onclick="Game.endTurn()">⚔️ 结束回合</button>
+            <button class="btn btn-end-turn" onclick="Game.endTurn()">结束回合</button>
         </div>
     </div>
 
     <!-- Rest Screen -->
     <div id="screen-rest" class="screen">
-        <button class="btn btn-back" onclick="Game.showScreen('map')">← 返回</button>
+        <button class="btn btn-back" onclick="Game.showScreen('map')">返回</button>
         <div class="rest-content">
             <h2>休息站点</h2>
-            <div class="rest-icon">⛺</div>
-            <p>恢复30%最大生命值</p>
-            <button class="btn btn-primary btn-rest" onclick="Game.rest()">休息</button>
-            <button class="btn btn-secondary" onclick="Game.showScreen('map')">继续前进</button>
+            <div class="rest-icon">🔥</div>
+            <p id="rest-heal-info">恢复30%最大生命值</p>
+            <div class="rest-options">
+                <button class="btn btn-primary" onclick="Game.rest()">休息</button>
+                <button class="btn btn-secondary" onclick="Game.showScreen('map')">继续前进</button>
+            </div>
         </div>
     </div>
 
     <!-- Shop Screen -->
     <div id="screen-shop" class="screen">
-        <button class="btn btn-back" onclick="Game.showScreen('map')">← 返回</button>
+        <button class="btn btn-back" onclick="Game.showScreen('map')">返回</button>
         <div class="shop-header">
             <h2 class="section-title">商店</h2>
-            <div class="stat-bar"><span>💰</span> <span id="shop-gold">80</span></div>
+            <div class="shop-gold">💰 <span id="shop-gold">80</span></div>
         </div>
         <div class="shop-items" id="shop-cards"></div>
+    </div>
+
+    <!-- Card Reward Screen -->
+    <div id="screen-card-reward" class="screen">
+        <div class="reward-content">
+            <h2 class="reward-title">获得新卡牌</h2>
+            <p class="reward-subtitle">选择一张卡牌加入牌组</p>
+            <div class="reward-cards" id="reward-cards"></div>
+            <button class="btn btn-skip" onclick="Game.skipReward()">跳过</button>
+        </div>
+    </div>
+
+    <!-- Event Screen -->
+    <div id="screen-event" class="screen">
+        <div class="event-content" id="event-content"></div>
     </div>
 
     <!-- Game Over Screen -->
     <div id="screen-gameover" class="screen">
         <div class="gameover-content">
-            <h1 class="gameover-title">💀 失败 💀</h1>
-            <div class="menu-buttons" style="margin-top: 2rem;">
+            <h1 class="gameover-title" id="gameover-title">失败</h1>
+            <div class="gameover-stats" id="gameover-stats"></div>
+            <div class="gameover-buttons">
                 <button class="btn btn-primary" onclick="Game.init(); Game.showScreen('character-select')">重新开始</button>
                 <button class="btn btn-secondary" onclick="Game.showScreen('menu')">返回主菜单</button>
             </div>
